@@ -5,7 +5,7 @@ Created on Sun Jan 27 17:14:46 2019
 
 @author: supaul
 """
-INTEGER, PLUS, EOF = 'INT', 'PLUS', 'EOF'
+INTEGER, PLUS, EOF,SUB = 'INT', 'PLUS', 'EOF','SUB'
 
 class Token:
     def __init__(self,value,tokenType):
@@ -30,6 +30,9 @@ class Interpreter:
         elif(ch=='+'):
             self.index+=1
             return Token(ch,'PLUS')
+        elif(ch=='-'):
+            self.index+=1
+            return Token(ch,'SUB')
         else:
             self.throwError()
             
@@ -39,20 +42,29 @@ class Interpreter:
     def check(self,token,tokentype):
         if(token.type!=tokentype):
             self.throwError()
-        
+    def checkOp(self,token,tokentypeArr):
+        check=False
+        for tokentype in tokentypeArr:
+            if(token.type==tokentype):
+                check=True
+        if(check==False):
+            self.throwError()
         
         
         
     def expr(self):
         firstToken=self.getNextToken()
         self.check(firstToken,'INT')
-        plusToken=self.getNextToken()
-        self.check(plusToken,'PLUS')
+        operatorToken=self.getNextToken()
+        self.checkOp(operatorToken,['PLUS','SUB'])
         secondToken=self.getNextToken()
         self.check(secondToken,'INT')
         eofToken=self.getNextToken()
         self.check(eofToken,'EOF')
-        return (firstToken.val+secondToken.val)
+        if(operatorToken.type=='PLUS'):
+            return (firstToken.val+secondToken.val)
+        else:
+            return (firstToken.val-secondToken.val)
         
 
         
