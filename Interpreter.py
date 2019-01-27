@@ -19,14 +19,24 @@ class Interpreter:
         self.index=0
     def throwError(self):
         raise Exception("Error parsing Input")
+        
+    def getInteger(self):
+        stringInt=''
+        while(self.index<len(self.text) and self.text[self.index].isdigit()):
+            stringInt+=self.text[self.index]
+            self.index+=1
+        return int(stringInt)
+    
+            
+        
     def getNextToken(self):
         if(self.index>=len(self.text)):
             self.index+=1
             return Token(None,'EOF')
         ch=self.text[self.index]
+        ###This part needs a change
         if(ch.isdigit()):
-            self.index+=1
-            return Token(int(ch),'INT')
+            return Token(self.getInteger(),'INT')
         elif(ch=='+'):
             self.index+=1
             return Token(ch,'PLUS')
@@ -36,7 +46,7 @@ class Interpreter:
         else:
             self.throwError()
             
-            
+    
         
         
     def check(self,token,tokentype):
