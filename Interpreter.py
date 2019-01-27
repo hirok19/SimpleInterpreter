@@ -5,7 +5,7 @@ Created on Sun Jan 27 17:14:46 2019
 
 @author: supaul
 """
-INTEGER, PLUS, EOF,SUB = 'INT', 'PLUS', 'EOF','SUB'
+INTEGER, PLUS, EOF,cSUB ,DIV ,MUL = 'INT', 'PLUS', 'EOF','SUB','DIV','MUL'
 
 class Token:
     def __init__(self,value,tokenType):
@@ -43,6 +43,12 @@ class Interpreter:
         elif(ch=='-'):
             self.index+=1
             return Token(ch,'SUB')
+        elif(ch=='*'):
+            self.index+=1
+            return Token(ch,'MUL')
+        elif(ch=='/'):
+            self.index+=1
+            return Token(ch,'DIV')
         else:
             self.throwError()
             
@@ -66,13 +72,17 @@ class Interpreter:
         firstToken=self.getNextToken()
         self.check(firstToken,'INT')
         operatorToken=self.getNextToken()
-        self.checkOp(operatorToken,['PLUS','SUB'])
+        self.checkOp(operatorToken,['PLUS','SUB','MUL','DIV'])
         secondToken=self.getNextToken()
         self.check(secondToken,'INT')
         eofToken=self.getNextToken()
         self.check(eofToken,'EOF')
         if(operatorToken.type=='PLUS'):
             return (firstToken.val+secondToken.val)
+        elif(operatorToken.type=='MUL'):
+            return (firstToken.val*secondToken.val)
+        elif(operatorToken.type=='DIV'):
+            return (firstToken.val/secondToken.val)
         else:
             return (firstToken.val-secondToken.val)
         
