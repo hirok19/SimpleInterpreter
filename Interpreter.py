@@ -69,6 +69,26 @@ class Interpreter:
         
         
     def expr(self):
+        currToken=self.getNextToken()
+        self.check(currToken,'INT')
+        result=currToken.val
+        while(currToken.type!='EOF'):
+            currToken=self.getNextToken()
+            if(currToken.type=='PLUS' or currToken.type=='SUB' or currToken.type=='MUL' or currToken.type=='DIV'):
+                term=self.getNextToken()
+                self.check(term,'INT')
+                if(currToken.type=='PLUS'):
+                    result+=term.val
+                elif(currToken.type=='SUB'):
+                    result-=term.val
+                elif(currToken.type=='MUL'):
+                    result*=term.val
+                else:
+                    result/=term.val 
+                
+        return result
+            
+        '''
         firstToken=self.getNextToken()
         self.check(firstToken,'INT')
         operatorToken=self.getNextToken()
@@ -85,6 +105,7 @@ class Interpreter:
             return (firstToken.val/secondToken.val)
         else:
             return (firstToken.val-secondToken.val)
+        '''
         
 
         
