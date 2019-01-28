@@ -7,15 +7,23 @@ Created on Sun Jan 27 17:09:59 2019
 """
 from Interpreter import *
 from Purger import *
-
+import os 
 def main():
     while True:
-        text = input('pascal> ')
-        purger=Purger(text)
-        text=purger.purge()
-        interpreter = Interpreter(text)
-        result = interpreter.expr()
-        print(result)
+        try:
+            text = input('pascal> ')
+            purger=Purger(text)
+            text=purger.purge()
+            if(text=="EXIT"):
+                break
+            if(text=="CLEAR"):
+                os.system('clear')
+                continue
+            interpreter = Interpreter(text)
+            result = interpreter.expr()
+            print(result)
+        except:
+            print("Unable to Parse Expression")
     
     
 if __name__ == '__main__':
