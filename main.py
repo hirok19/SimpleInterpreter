@@ -22,7 +22,8 @@ def main():
             interpreter = Interpreter(text)
             result = interpreter.expr()
             print(result)
-        except:
+        except Exception as e:
+            print(e)
             print("Unable to Parse Expression")
     
     

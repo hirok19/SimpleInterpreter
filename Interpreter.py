@@ -5,7 +5,11 @@ Created on Sun Jan 27 17:14:46 2019
 
 @author: supaul
 """
-INTEGER, PLUS, EOF,cSUB ,DIV ,MUL = 'INT', 'PLUS', 'EOF','SUB','DIV','MUL'
+from  stack import *
+from PostFixConverter import *
+from PostFixEvaluator import *
+
+INTEGER, PLUS, EOF, SUB ,DIV ,MUL = 'INT', 'PLUS', 'EOF','SUB','DIV','MUL'
 
 class Token:
     def __init__(self,value,tokenType):
@@ -69,24 +73,19 @@ class Interpreter:
         
         
     def expr(self):
-        currToken=self.getNextToken()
-        self.check(currToken,'INT')
-        result=currToken.val
-        while(currToken.type!='EOF'):
+        result=0
+        currToken=None
+        listOfToken=[]
+        while(currToken==None or currToken.type!='EOF'):
             currToken=self.getNextToken()
-            if(currToken.type=='PLUS' or currToken.type=='SUB' or currToken.type=='MUL' or currToken.type=='DIV'):
-                term=self.getNextToken()
-                self.check(term,'INT')
-                if(currToken.type=='PLUS'):
-                    result+=term.val
-                elif(currToken.type=='SUB'):
-                    result-=term.val
-                elif(currToken.type=='MUL'):
-                    result*=term.val
-                else:
-                    result/=term.val 
-                
-        return result
+            listOfToken.append(currToken)
+            
+        #for token in listOfToken[:-1]:
+         #   print(token.val)
+        postFixConverter=PostFixConverter(listOfToken[:-1]);
+        postfixexpr=postFixConverter.convertPostFix()
+        postFixEvaluator=PostFixEvaluator(postfixexpr)
+        return postFixEvaluator.evaluate()
             
         '''
         firstToken=self.getNextToken()
